@@ -10,7 +10,7 @@ const Header = () => {
         <header className="header flex items-center justify-between py-5 px-5 md:px-10 md:justify-evenly bg-gray-900 text-white">
             <div className='w-[120px]'>
                 <Link to="/">
-                    <img src="/src/assets/logo.png" alt="" className='w-full' />
+                    <img src="/logo.png" alt="" className='w-full' />
                 </Link>
             </div>
             <nav className="hidden md:flex gap-x-5">
