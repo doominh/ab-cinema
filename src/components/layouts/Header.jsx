@@ -6,6 +6,8 @@ const Header = () => {
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+    const closeMenu = () => setIsMenuOpen(false);
+
     return (
         <header className="header flex items-center justify-between py-5 px-5 md:px-10 md:justify-evenly bg-gray-900 text-white">
             <div className='w-[120px]'>
@@ -27,10 +29,10 @@ const Header = () => {
 
                 {isMenuOpen && (
                     <div className="absolute right-0 left-0 z-10 p-5 bg-slate-800 rounded-b-md shadow-md flex flex-col items-center">
-                        <NavLink to='/' className={({ isActive }) => isActive ? 'block text-primary transition-all py-2' : 'block py-2'}>
+                        <NavLink to='/' onClick={closeMenu} className={({ isActive }) => isActive ? 'block text-primary transition-all py-2' : 'block py-2'}>
                             Home
                         </NavLink>
-                        <NavLink to='/movies' className={({ isActive }) => isActive ? 'block text-primary transition-all py-2' : 'block py-2'}>
+                        <NavLink to='/movies' onClick={closeMenu} className={({ isActive }) => isActive ? 'block text-primary transition-all py-2' : 'block py-2'}>
                             Movies
                         </NavLink>
                     </div>
