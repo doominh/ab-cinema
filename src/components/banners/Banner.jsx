@@ -5,20 +5,32 @@ import PropTypes from 'prop-types';
 import { Autoplay } from 'swiper/modules';
 import { useNavigate } from 'react-router-dom';
 import Button from '../button/Button';
+import { useState } from 'react';
 
 const Banner = () => {
     const { data } = useSWR(tmdbAPI.getMovieBanner("phim-moi-cap-nhat"), fetcher);
     const movies = data?.items || [];
+    const [activeIndex, setActiveIndex] = useState(0);
+    const currentMovie = movies[activeIndex];
+    const { data: detail } = useSWR(
+        currentMovie ? `https://phimapi.com/phim/${currentMovie.slug}` : null,
+        fetcher
+    );
     return (
         <section className="banner h-[350px] md:h-[500px] page-container mb-20">
             <Swiper
                 grabCursor="true"
                 slidesPerView={"auto"}
                 modules={[Autoplay]}
-                autoplay={{ delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true }} >
-                {movies.length > 0 && movies.map(item => (
+                autoplay={{ delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true }}
+                onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+            >
+                {movies.length > 0 && movies.map((item, index) => (
                     <SwiperSlide key={item._id}>
-                        <BannerItem item={item}></BannerItem>
+                        <BannerItem
+                            item={item}
+                            detail={index === activeIndex ? detail : null}
+                        />
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -26,13 +38,14 @@ const Banner = () => {
     )
 }
 
-const BannerItem = ({ item }) => {
+const BannerItem = ({ item, detail }) => {
     const navigate = useNavigate()
     const {
         name,
         thumb_url,
         slug,
     } = item;
+    const categories = detail?.movie?.category || [];
     return <div className="w-full h-full rounded-lg relative">
         <div className="overlay absolute inset-0 bg-gradient-to-t from-[rgba(0,0,0,0.8)] to-[rgba(0,0,0,0)] rounded-lg"></div>
         <img
@@ -43,9 +56,19 @@ const BannerItem = ({ item }) => {
         <div className="absolute left-5 bottom-5 w-full text-white">
             <h2 className="font-bold text-3xl mb-5">{name}</h2>
             <div className="flex items-center gap-x-3 mb-8">
-                <span className="py-2 px-4 border border-white rounded-md hover:bg-primary transition-all cursor-pointer">Action</span>
-                <span className="py-2 px-4 border border-white rounded-md hover:bg-primary transition-all cursor-pointer">Adventure</span>
-                <span className="py-2 px-4 border border-white rounded-md hover:bg-primary transition-all cursor-pointer">Drama</span>
+                {categories.length > 0 ? (
+                    categories.map((c) => (
+                        <span
+                            key={c.id || c.name}
+                            className="py-2 px-4 border border-white rounded-md hover:bg-primary transition-all cursor-pointer"
+                            onClick={() => navigate(`/movies/categorySlug/${c.slug}/categoryName/${c.name}`)}
+                        >
+                            {c.name}
+                        </span>
+                    ))
+                ) : (
+                    <div className="w-6 h-6 rounded-full border-4 border-white border-t-transparent border-t-4 mx-left animate-spin"></div>
+                )}
             </div>
             <Button onClick={() => navigate(`/movies/${slug}`)} bgColor='secondary'>
                 <div className='flex items-center gap-2'>
@@ -68,6 +91,7 @@ BannerItem.propTypes = {
         thumb_url: PropTypes.string.isRequired,
         slug: PropTypes.string.isRequired,
     }).isRequired,
-}
+    detail: PropTypes.object,
+};
 
 export default Banner
