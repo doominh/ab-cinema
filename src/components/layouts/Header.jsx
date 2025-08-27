@@ -3,11 +3,16 @@ import { Link, NavLink } from 'react-router-dom';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [hasInteracted, setHasInteracted] = useState(false);
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+        setHasInteracted(true);
+    };
 
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
-    const closeMenu = () => setIsMenuOpen(false);
-
+    const closeMenu = () => {
+        setIsMenuOpen(false);
+        setHasInteracted(true);
+    };
     return (
         <header className="header flex items-center justify-between py-5 px-5 md:px-10 md:justify-evenly bg-gray-900 text-white">
             <div className='w-[120px]'>
@@ -27,16 +32,44 @@ const Header = () => {
                     </svg>
                 </button>
 
-                {isMenuOpen && (
-                    <div className="absolute right-0 left-0 z-10 p-5 bg-slate-800 rounded-b-md shadow-md flex flex-col items-center">
-                        <NavLink to='/' onClick={closeMenu} className={({ isActive }) => isActive ? 'block text-primary transition-all py-2' : 'block py-2'}>
-                            Home
-                        </NavLink>
-                        <NavLink to='/movies' onClick={closeMenu} className={({ isActive }) => isActive ? 'block text-primary transition-all py-2' : 'block py-2'}>
-                            Movies
-                        </NavLink>
-                    </div>
-                )}
+                <div
+                    className={`absolute min-h-60 right-0 left-0 top-0 p-5 bg-slate-800 rounded-b-md shadow-md flex flex-col items-center justify-center
+            ${!hasInteracted
+                            ? "hidden"
+                            : isMenuOpen
+                                ? "animate-slideUp z-10"
+                                : "animate-slideDown z-0"
+                        }`}
+                >
+                    <button
+                        onClick={closeMenu}
+                        className="absolute top-6 right-6 text-white text-2xl hover:text-primary transition"
+                    >
+                        ✕
+                    </button>
+                    <NavLink
+                        to="/"
+                        onClick={closeMenu}
+                        className={({ isActive }) =>
+                            isActive
+                                ? "block text-primary transition-all py-2"
+                                : "block py-2"
+                        }
+                    >
+                        Home
+                    </NavLink>
+                    <NavLink
+                        to="/movies"
+                        onClick={closeMenu}
+                        className={({ isActive }) =>
+                            isActive
+                                ? "block text-primary transition-all py-2"
+                                : "block py-2"
+                        }
+                    >
+                        Movies
+                    </NavLink>
+                </div>
             </div>
         </header>
     );

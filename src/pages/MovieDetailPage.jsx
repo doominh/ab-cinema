@@ -12,7 +12,7 @@ const MovieDetailPage = () => {
     const isLoading = !data && !error;
     if (!data) return null;
     const { poster_url, thumb_url, name, category, content, actor } = data.movie;
-    const {server_data} = data.episodes[0];
+    const { server_name, server_data } = data.episodes[0];
     return (
         <div className="pb-10">
             {isLoading
@@ -59,7 +59,7 @@ const MovieDetailPage = () => {
                         ))}
                     </div>}
                     <p className="text-center indent-4 leading-relaxed max-w-[600px] mx-auto mb-10">{content}</p>
-                    <MovieWatch episodes={server_data}></MovieWatch>
+                    <MovieWatch episodes={server_data} server={server_name} ></MovieWatch>
                     <MovieCredits actor={actor} isLoading={isLoading}></MovieCredits>
                     <div className="py-10">
                         {category.length > 0 && category.map(item => (

@@ -55,7 +55,7 @@ const BannerItem = ({ item, detail }) => {
         />
         <div className="absolute left-5 bottom-5 w-full text-white">
             <h2 className="font-bold text-3xl mb-5">{name}</h2>
-            <div className="flex items-center gap-x-3 mb-8">
+            <div className="hidden sm:flex items-center gap-x-3 mb-8">
                 {categories.length > 0 ? (
                     categories.map((c) => (
                         <span

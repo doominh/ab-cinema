@@ -25,11 +25,13 @@ const MoviePageCategory = () => {
         fetcher
     );
 
-    const movies = data ? data.reduce((a, b) => a.concat(b.data.items), []) : [];
+    const movies = data
+        ? data.reduce((a, b) => a.concat(b.data.items || []), [])
+        : [];
     const isLoadingMore =
         isLoading || (size > 0 && data && typeof data[size - 1] === "undefined");
     const loading = !error && !data;
-    const isEmpty = data?.[0]?.data.items.length === 0;
+    const isEmpty = !data?.[0]?.data?.items || data[0].data.items.length === 0;
     const isReachingEnd =
         isEmpty || (data && data[data.length - 1]?.data.items.length < itemsPerPage);
 

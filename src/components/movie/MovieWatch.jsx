@@ -1,8 +1,8 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
+// import { Swiper, SwiperSlide } from 'swiper/react';
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-const MovieWatch = ({ episodes }) => {
+const MovieWatch = ({ episodes, server }) => {
     const [currentVideo, setCurrentVideo] = useState(episodes[0].link_embed);
     const [activeEpi, setActiveEpi] = useState(episodes[0].slug);
     const handleVideoChange = (link, slug) => {
@@ -21,7 +21,7 @@ const MovieWatch = ({ episodes }) => {
                     className="absolute top-0 left-0 w-full h-full sm:rounded-md"
                 />
             </div>
-            <div className="episode-list border-b border-gray-200 pb-6">
+            {/* <div className="episode-list border-b border-gray-200 pb-6">
                 <h3 className="text-2xl font-semibold text-gray-800 mb-4">
                     Các tập phim
                 </h3>
@@ -39,6 +39,24 @@ const MovieWatch = ({ episodes }) => {
                         </SwiperSlide>
                     ))}
                 </Swiper>
+            </div> */}
+            <div className="episode-list border-b border-gray-200 py-6">
+                <h3 className="text-2xl font-semibold text-white mb-4">{server}</h3>
+                <div className="max-h-80 overflow-y-auto grid grid-cols-6 gap-4 pr-2">
+                    {episodes.length > 0 &&
+                        episodes.map((item) => (
+                            <button
+                                key={item.slug}
+                                onClick={() => handleVideoChange(item.link_embed, item.slug)}
+                                className={`h-10 flex items-center justify-center rounded-md border font-semibold transition-all ${activeEpi === item.slug
+                                    ? "border border-primary bg-primary text-white"
+                                    : "hover:border-primary hover:text-primary"
+                                    }`}
+                            >
+                                {item.name}
+                            </button>
+                        ))}
+                </div>
             </div>
         </>
     );
