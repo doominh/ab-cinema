@@ -9,10 +9,9 @@ export default {
       colors: {
         primary: "#F62682",
         secondary: "#6F5CF1",
-        primaryPurple: 'rgba(125, 106, 255, 1)',
+        primaryPurple: "rgba(125, 106, 255, 1)",
       },
-    },
-    keyframes: {
+      keyframes: {
         slideUp: {
           "0%": { transform: "translateY(100%)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
@@ -26,6 +25,7 @@ export default {
         slideUp: "slideUp 0.5s ease-out forwards",
         slideDown: "slideDown 0.5s ease-out forwards",
       },
+    },
   },
   plugins: [],
 };

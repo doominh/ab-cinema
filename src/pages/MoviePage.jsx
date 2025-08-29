@@ -6,6 +6,7 @@ import Button from "@/components/button/Button";
 import ScrollToTopButton from "@/components/button/ScrollToTopButton";
 import useDebounce from "@/hooks/useDebounce";
 import { v4 } from "uuid"
+import Spin from "@/components/loading/Spin";
 
 const itemsPerPage = 20;
 const MoviePage = () => {
@@ -81,7 +82,7 @@ const MoviePage = () => {
                     disabled={isReachingEnd || isLoadingMore}
                     className={`w-32 ${isReachingEnd ? "bg-slate-400" : ""}`}
                 >{isLoadingMore
-                    ? <div className="w-6 h-6 rounded-full border-4 border-white border-t-transparent border-t-4 mx-auto animate-spin"></div>
+                    ? <Spin size="w-6 h-6" className="flex items-center justify-center w-full h-full"></Spin>
                     : isReachingEnd
                         ? "No more movies"
                         : "Load more"}</Button>

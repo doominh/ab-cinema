@@ -6,6 +6,7 @@ import { Autoplay } from 'swiper/modules';
 import { useNavigate } from 'react-router-dom';
 import Button from '../button/Button';
 import { useState } from 'react';
+import Spin from '../loading/Spin';
 
 const Banner = () => {
     const { data } = useSWR(tmdbAPI.getMovieBanner("phim-moi-cap-nhat"), fetcher);
@@ -17,7 +18,7 @@ const Banner = () => {
         fetcher
     );
     return (
-        <section className="banner h-[350px] md:h-[500px] page-container mb-20">
+        <section className="banner h-[350px] md:h-[500px] xl:h-[550px] page-container mb-20">
             <Swiper
                 grabCursor="true"
                 slidesPerView={"auto"}
@@ -51,7 +52,7 @@ const BannerItem = ({ item, detail }) => {
         <img
             src={thumb_url}
             alt=""
-            className="w-full h-full object-contain rounded-lg"
+            className="w-full h-full object-cover rounded-lg"
         />
         <div className="absolute left-5 bottom-5 w-full text-white">
             <h2 className="font-bold text-3xl mb-5">{name}</h2>
@@ -67,7 +68,7 @@ const BannerItem = ({ item, detail }) => {
                         </span>
                     ))
                 ) : (
-                    <div className="w-6 h-6 rounded-full border-4 border-white border-t-transparent border-t-4 mx-left animate-spin"></div>
+                    <Spin size='h-10 w-10' className='flex items-center justify-start w-full h-full'></Spin>
                 )}
             </div>
             <Button onClick={() => navigate(`/movies/${slug}`)} bgColor='secondary'>
@@ -79,7 +80,6 @@ const BannerItem = ({ item, detail }) => {
                         <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.024-.983a1.125 1.125 0 0 1 0 1.966l-5.603 3.113A1.125 1.125 0 0 1 9 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113Z" clipRule="evenodd" />
                     </svg>
                 </div>
-
             </Button>
         </div>
     </div>
