@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(false);
+
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
         setHasInteracted(true);
@@ -14,8 +15,16 @@ const Header = () => {
         setHasInteracted(true);
     };
 
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.classList.add("overflow-hidden");
+        } else {
+            document.body.classList.remove("overflow-hidden");
+        }
+    }, [isMenuOpen]);
+
     return (
-        <header className="header flex items-center justify-between py-5 px-5 md:px-10 bg-white dark:bg-slate-900 text-black dark:text-white">
+        <header className="header flex items-center justify-between py-5 px-5 md:px-10 bg-slate-900 text-white">
             <div className="w-[120px]">
                 <Link to="/">
                     <img src="/logo.png" alt="" className="w-full" />
@@ -25,7 +34,7 @@ const Header = () => {
                 <NavLink
                     to="/"
                     className={({ isActive }) =>
-                        isActive ? 'text-primary transition-all' : 'text-black dark:text-white'
+                        isActive ? 'text-primary transition-all' : 'text-white'
                     }
                 >
                     Home
@@ -33,7 +42,7 @@ const Header = () => {
                 <NavLink
                     to="/movies"
                     className={({ isActive }) =>
-                        isActive ? 'text-primary transition-all' : 'text-black dark:text-white'
+                        isActive ? 'text-primary transition-all' : 'text-white'
                     }
                 >
                     Movies
@@ -41,7 +50,7 @@ const Header = () => {
             </nav>
 
             <div className="md:hidden">
-                <button onClick={toggleMenu} className="text-black dark:text-white">
+                <button onClick={toggleMenu} className="text-white">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -57,42 +66,48 @@ const Header = () => {
                 </button>
 
                 <div
-                    className={`absolute min-h-60 right-0 left-0 top-0 p-5 bg-slate-200 dark:bg-slate-800 rounded-b-md shadow-md flex flex-col items-center justify-center
+                    className={`fixed inset-0 flex flex-col transition-all duration-300
                         ${!hasInteracted
                             ? 'hidden'
                             : isMenuOpen
-                                ? 'animate-slideUp z-10'
-                                : 'animate-slideDown z-0'
+                                ? 'translate-y-0 z-10'
+                                : '-translate-y-full z-0'
                         }`}
                 >
-                    <button
-                        onClick={closeMenu}
-                        className="absolute top-6 right-6 text-black dark:text-white text-2xl hover:text-primary transition"
-                    >
-                        ✕
-                    </button>
-                    <NavLink
-                        to="/"
-                        onClick={closeMenu}
-                        className={({ isActive }) =>
-                            isActive
-                                ? 'block text-primary transition-all py-2'
-                                : 'block py-2 text-black dark:text-white'
-                        }
-                    >
-                        Home
-                    </NavLink>
-                    <NavLink
-                        to="/movies"
-                        onClick={closeMenu}
-                        className={({ isActive }) =>
-                            isActive
-                                ? 'block text-primary transition-all py-2'
-                                : 'block py-2 text-black dark:text-white'
-                        }
-                    >
-                        Movies
-                    </NavLink>
+                    <div className="flex-[2] bg-slate-800 rounded-b-md shadow-md flex flex-col items-center justify-center relative">
+                        <button
+                            onClick={closeMenu}
+                            className="absolute top-6 right-6 text-white text-2xl hover:text-primary transition"
+                        >
+                            ✕
+                        </button>
+                        <NavLink
+                            to="/"
+                            onClick={closeMenu}
+                            className={({ isActive }) =>
+                                isActive
+                                    ? 'block text-primary transition-all py-2'
+                                    : 'block py-2 text-white'
+                            }
+                        >
+                            Home
+                        </NavLink>
+                        <NavLink
+                            to="/movies"
+                            onClick={closeMenu}
+                            className={({ isActive }) =>
+                                isActive
+                                    ? 'block text-primary transition-all py-2'
+                                    : 'block py-2 text-white'
+                            }
+                        >
+                            Movies
+                        </NavLink>
+                    </div>
+
+                    <div
+                        className="flex-[3] bg-black/50"
+                    />
                 </div>
             </div>
         </header>
