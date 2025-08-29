@@ -25,7 +25,7 @@ const MovieCard = ({ item }) => {
         <div className="flex items-center justify-start text-sm opacity-50 mb-10">
           <span>{year}</span>
         </div>
-        <Button onClick={() => navigate(`/movies/${slug}`)} bgColor="secondary" full >Xem ngay</Button>
+        <Button onClick={() => navigate(`/movies/${slug}`)} bgColor="secondary" full >Xem phim</Button>
       </div>
     </div>
   );

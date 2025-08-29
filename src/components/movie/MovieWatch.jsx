@@ -42,14 +42,14 @@ const MovieWatch = ({ episodes, server }) => {
             </div> */}
             <div className="episode-list border-b border-gray-200 py-6">
                 <h3 className="text-2xl font-semibold text-white mb-4">{server}</h3>
-                <div className="max-h-80 overflow-y-auto grid grid-cols-6 gap-4 pr-2">
+                <div className="max-h-80 overflow-y-auto grid  grid-cols-4 sm:grid-cols-6 gap-3 sm:gap-4 pr-2">
                     {episodes.length > 0 &&
                         episodes.map((item) => (
                             <button
                                 key={item.slug}
                                 onClick={() => handleVideoChange(item.link_embed, item.slug)}
                                 className={`h-10 flex items-center justify-center rounded-md border font-semibold transition-all ${activeEpi === item.slug
-                                    ? "border border-primary bg-primary text-white"
+                                    ? "border bg-primary text-white"
                                     : "hover:border-primary hover:text-primary"
                                     }`}
                             >
@@ -63,5 +63,6 @@ const MovieWatch = ({ episodes, server }) => {
 };
 MovieWatch.propTypes = {
     episodes: PropTypes.array,
+    server: PropTypes.array,
 };
 export default MovieWatch;

@@ -9,7 +9,9 @@
 }
 
 @layer components {
-    .page-container {
+
+    .page-container,
+    .header {
         max-width: 1280px;
         @apply mx-auto;
     }

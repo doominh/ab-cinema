@@ -5,8 +5,10 @@ import PropTypes from "prop-types";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import MovieList from "@/components/movie/MovieList";
 import MovieWatch from "@/components/movie/MovieWatch";
+import { useState } from "react";
 
 const MovieDetailPage = () => {
+
     const { movieId } = useParams();
     const { data, error } = useSWR(tmdbAPI.getMovieDetail(movieId), fetcher);
     const isLoading = !data && !error;
@@ -52,13 +54,13 @@ const MovieDetailPage = () => {
                     <div className="w-full h-full max-w-[900px] mx-auto -mt-[200px] relative z-10 pb-10">
                         <img src={thumb_url || "/src/assets/default_movie_image.png"} alt="" className="w-full h-full object-cover rounded-xl" />
                     </div>
-                    <h1 className="text-center text-5xl font-semibold mb-10">{name}</h1>
+                    <h1 className="text-center text-4xl sm:text-5xl font-semibold mb-10">{name}</h1>
                     {category.length > 0 && <div className="gap-5 mb-10 flex justify-center items-center flex-wrap">
                         {category.map(item => (
-                            <button key={item.id} className='py-3 px-6 rounded-full border-2 border-primaryPurple text-primaryPurple text-lg font-semibold'>{item.name}</button>
+                            <button key={item.id} className='py-1 sm:py-3 px-3 sm:px-6 rounded-full border-2 border-primaryPurple text-primaryPurple text-lg font-semibold'>{item.name}</button>
                         ))}
                     </div>}
-                    <p className="text-center indent-4 leading-relaxed max-w-[600px] mx-auto mb-10">{content}</p>
+                    <MovieContent content={content} ></MovieContent>
                     <MovieWatch episodes={server_data} server={server_name} ></MovieWatch>
                     <MovieCredits actor={actor} isLoading={isLoading}></MovieCredits>
                     <div className="py-10">
@@ -75,11 +77,44 @@ const MovieDetailPage = () => {
     )
 }
 
+function MovieContent({ content }) {
+    const [isExpanded, setIsExpanded] = useState(false);
+    if (!content || content.length < 0) return null;
+    const maxLength = 150;
+    const isLongContent = content.length > maxLength;
+
+    const displayContent = isExpanded ? content : content.slice(0, maxLength);
+
+    return (
+        <div>
+            <p
+                className={`text-center indent-4 leading-relaxed max-w-[600px] mx-auto mb-10 transition-all duration-300 ${isExpanded ? '' : 'max-h-[100px] overflow-hidden'
+                    }`}
+            >
+                {displayContent}
+                {isLongContent && !isExpanded && (
+                    <span className="inline-block ml-1">...</span>
+                )}
+                {isLongContent && (
+                    <span
+                        className="text-primaryPurple cursor-pointer hover:underline ml-2"
+                        onClick={() => setIsExpanded(!isExpanded)}
+                    >
+                        {isExpanded ? 'Thu gọn' : 'Xem thêm'}
+                    </span>
+                )}
+            </p>
+        </div>
+    );
+}
+MovieContent.propTypes = {
+    content: PropTypes.string,
+};
 function MovieCredits({ actor, isLoading }) {
     if (!actor || actor.length <= 0) return null;
     return <div className="py-10">
-        <h2 className="text-center text-4xl font-semibold mb-10">Casts</h2>
-        <div className="flex items-center justify-evenly flex-wrap gap-5">
+        <h2 className="text-center text-3xl sm:text-4xl font-semibold mb-10">Diễn viên</h2>
+        <div className="flex items-center justify-evenly flex-wrap gap-3 sm:gap-5">
             {isLoading && (
                 Array.from({ length: 4 }).map((_, index) => (
                     <div key={index} className="cast-item-skeleton">
@@ -90,7 +125,7 @@ function MovieCredits({ actor, isLoading }) {
                 ))
             )}
             {!isLoading && actor.slice(0, 4).map((item) => (
-                <div key={item} className="cast-item bg-primaryPurple py-2 px-4 rounded-full">
+                <div key={item} className="cast-item bg-primaryPurple py-1 sm:py-2 px-3 sm:px-4 rounded-full">
                     <h3 className="text-lg font-semibold text-center">{item}</h3>
                 </div>
             ))}
