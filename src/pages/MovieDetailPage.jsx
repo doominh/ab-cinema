@@ -5,13 +5,20 @@ import PropTypes from "prop-types";
 import LoadingSkeleton from "@/components/loading/LoadingSkeleton";
 import MovieList from "@/components/movie/MovieList";
 import MovieWatch from "@/components/movie/MovieWatch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const MovieDetailPage = () => {
-
     const { movieId } = useParams();
     const { data, error } = useSWR(tmdbAPI.getMovieDetail(movieId), fetcher);
     const isLoading = !data && !error;
+    useEffect(() => {
+        if (data?.movie?.name) {
+            document.title = `Xem phim ${data.movie.name || 'Absolute Cinema'}`;
+        }
+        return () => {
+            document.title = "Absolute Cinema";
+        };
+    }, [data]);
     if (!data) return null;
     const { poster_url, thumb_url, name, category, content, actor } = data.movie;
     const { server_name, server_data } = data.episodes[0];

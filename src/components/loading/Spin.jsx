@@ -1,6 +1,10 @@
 import PropTypes from "prop-types";
 
-const Spin = ({ size, color, className}) => {
+const Spin = ({
+    size = "h-5 w-5",
+    color = "text-white",
+    className = "",
+}) => {
     return (
         <div className={className}>
             <svg
@@ -39,12 +43,6 @@ Spin.propTypes = {
     /** Tailwind text color class, ví dụ: "text-white", "text-indigo-500" */
     color: PropTypes.string,
     className: PropTypes.string,
-};
-
-Spin.defaultProps = {
-    size: "h-5 w-5",
-    color: "text-white",
-    className: "",
 };
 
 export default Spin;
