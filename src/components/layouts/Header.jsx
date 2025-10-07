@@ -1,9 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(false);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [searchTerm, setSearchTerm] = useState("");
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (!searchTerm.trim()) return;
+        navigate(`/movies?query=${encodeURIComponent(searchTerm)}`);
+        if (isMenuOpen) {
+            closeMenu();
+        }
+    };
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -14,6 +26,9 @@ const Header = () => {
         setIsMenuOpen(false);
         setHasInteracted(true);
     };
+    useEffect(() => {
+        setSearchTerm("");
+    }, [location.pathname]);
 
     useEffect(() => {
         if (isMenuOpen) {
@@ -48,7 +63,31 @@ const Header = () => {
                     Movies
                 </NavLink>
             </nav>
-
+            <form onSubmit={handleSearch} className="relative hidden md:block">
+                <input
+                    type="text"
+                    placeholder="Tìm kiếm phim..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-64 pl-4 pr-10 py-2 rounded-full bg-slate-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary transition"
+                />
+                <button
+                    type="submit"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition"
+                >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <g clipPath="url(#clip0_11775_10840)">
+                            <path d="M15.8483 15.1295L11.7174 11.0646C12.7991 9.8893 13.4638 8.33495 13.4638 6.62455C13.4633 2.96568 10.4496 0 6.7317 0C3.01382 0 0.00012207 2.96568 0.00012207 6.62455C0.00012207 10.2834 3.01382 13.2491 6.7317 13.2491C8.33808 13.2491 9.81141 12.6935 10.9687 11.7697L15.1157 15.8507C15.3177 16.0498 15.6458 16.0498 15.8478 15.8507C16.0504 15.6517 16.0504 15.3286 15.8483 15.1295ZM6.7317 12.2299C3.58597 12.2299 1.03587 9.72029 1.03587 6.62455C1.03587 3.52881 3.58597 1.01923 6.7317 1.01923C9.87745 1.01923 12.4275 3.52881 12.4275 6.62455C12.4275 9.72029 9.87745 12.2299 6.7317 12.2299Z" fill="currentColor" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_11775_10840">
+                                <rect width="20" height="20" fill="currentColor" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+                </button>
+            </form>
+            {/* tablet mobile */}
             <div className="md:hidden">
                 <button onClick={toggleMenu} className="text-white">
                     <svg
@@ -81,6 +120,32 @@ const Header = () => {
                         >
                             ✕
                         </button>
+                        <form
+                            onSubmit={handleSearch}
+                            className="relative w-full max-w-xs mb-5"
+                        >
+                            <input
+                                type="text"
+                                placeholder="Tìm kiếm phim..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full pl-4 pr-10 py-2 rounded-full bg-slate-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary transition"
+                            />
+                            <button
+                                type="submit"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition"
+                            >
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path d="M15.8483 15.1295L11.7174 11.0646C12.7991 9.8893 13.4638 8.33495 13.4638 6.62455C13.4633 2.96568 10.4496 0 6.7317 0C3.01382 0 0.00012207 2.96568 0.00012207 6.62455C0.00012207 10.2834 3.01382 13.2491 6.7317 13.2491C8.33808 13.2491 9.81141 12.6935 10.9687 11.7697L15.1157 15.8507C15.3177 16.0498 15.6458 16.0498 15.8478 15.8507C16.0504 15.6517 16.0504 15.3286 15.8483 15.1295ZM6.7317 12.2299C3.58597 12.2299 1.03587 9.72029 1.03587 6.62455C1.03587 3.52881 3.58597 1.01923 6.7317 1.01923C9.87745 1.01923 12.4275 3.52881 12.4275 6.62455C12.4275 9.72029 9.87745 12.2299 6.7317 12.2299Z" />
+                                </svg>
+                            </button>
+                        </form>
                         <NavLink
                             to="/"
                             onClick={closeMenu}

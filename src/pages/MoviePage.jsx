@@ -7,15 +7,21 @@ import ScrollToTopButton from "@/components/button/ScrollToTopButton";
 import useDebounce from "@/hooks/useDebounce";
 import { v4 } from "uuid"
 import Spin from "@/components/loading/Spin";
+import { useSearchParams } from "react-router-dom";
 
 const itemsPerPage = 20;
 const MoviePage = () => {
+    const [searchParams] = useSearchParams();
+    const query = searchParams.get("query") || "";
+
     const [filter, setFilter] = useState("");
     const filterDebounce = useDebounce(filter);
+
     const [url, setUrl] = useState(tmdbAPI.getMovieType("phim-le"));
     const handleFilterChange = (e) => {
         setFilter(e.target.value);
     }
+
     const {
         data,
         error,
@@ -43,7 +49,11 @@ const MoviePage = () => {
         } else {
             setUrl(tmdbAPI.getMovieType("phim-le"));
         };
-    }, [filterDebounce])
+    }, [filterDebounce]);
+
+    useEffect(() => {
+        if (query) setFilter(query);
+    }, [query]);
     return (
         <div className="page-container">
             <div className="flex mb-10">
